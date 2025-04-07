@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>{{isEdit ? 'Editar' : 'Nova'}} Categoria</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="nome" placeholder="Nome da categoria">
+      <mat-error *ngIf="form.get('nome')?.hasError('required')">
+        Nome é obrigatório
+      </mat-error>
+      <mat-error *ngIf="form.get('nome')?.hasError('minlength')">
+        Nome deve ter no mínimo 3 caracteres
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="descricao" placeholder="Descrição da categoria" rows="3"></textarea>
+      <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+        Descrição é obrigatória
+      </mat-error>
+      <mat-error *ngIf="form.get('descricao')?.hasError('minlength')">
+        Descrição deve ter no mínimo 10 caracteres
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+    {{isEdit ? 'Atualizar' : 'Salvar'}}
+  </button>
+</mat-dialog-actions> 
