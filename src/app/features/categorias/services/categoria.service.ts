@@ -7,7 +7,7 @@ import { ApiService } from '../../../core/services/api.service';
     providedIn: 'root'
 })
 export class CategoriaService {
-    private readonly endpoint = '/api/categorias';
+    private readonly endpoint = 'categorias';
 
     constructor(private apiService: ApiService) { }
 

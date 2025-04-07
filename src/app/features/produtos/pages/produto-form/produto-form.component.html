@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{isEdit ? 'Editar' : 'Novo'}} Produto</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="nome" placeholder="Nome do produto">
+      <mat-error *ngIf="form.get('nome')?.hasError('required')">
+        Nome é obrigatório
+      </mat-error>
+      <mat-error *ngIf="form.get('nome')?.hasError('minlength')">
+        Nome deve ter no mínimo 3 caracteres
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="descricao" placeholder="Descrição do produto" rows="3"></textarea>
+      <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+        Descrição é obrigatória
+      </mat-error>
+      <mat-error *ngIf="form.get('descricao')?.hasError('minlength')">
+        Descrição deve ter no mínimo 10 caracteres
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Quantidade em Estoque</mat-label>
+        <input matInput type="number" formControlName="quantidadeEstoque" placeholder="Quantidade em estoque">
+        <mat-error *ngIf="form.get('quantidadeEstoque')?.hasError('required')">
+          Quantidade é obrigatória
+        </mat-error>
+        <mat-error *ngIf="form.get('quantidadeEstoque')?.hasError('min')">
+          Quantidade deve ser maior que 0
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Preço</mat-label>
+        <input matInput type="number" formControlName="preco" placeholder="Preço do produto">
+        <mat-error *ngIf="form.get('preco')?.hasError('required')">
+          Preço é obrigatório
+        </mat-error>
+        <mat-error *ngIf="form.get('preco')?.hasError('min')">
+          Preço deve ser maior que 0
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Categoria</mat-label>
+      <mat-select formControlName="categoriaId">
+        <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">
+          {{categoria.nome}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('categoriaId')?.hasError('required')">
+        Categoria é obrigatória
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+    {{isEdit ? 'Atualizar' : 'Salvar'}}
+  </button>
+</mat-dialog-actions> 

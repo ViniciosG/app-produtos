@@ -1,0 +1,27 @@
+.full-width {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+mat-dialog-content {
+    padding-top: 16px;
+}
+
+mat-dialog-actions {
+    padding: 16px 24px;
+    margin-bottom: 0;
+}
+
+// Responsividade
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}

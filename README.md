@@ -1,59 +1,121 @@
-# AppProdutos
+# Sistema de Gerenciamento de Produtos e Categorias
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+Sistema desenvolvido em Angular para gerenciamento de produtos e categorias, com interface moderna e funcionalidades CRUD completas.
 
-## Development server
+## Funcionalidades
 
-To start a local development server, run:
+### Categorias
+- Listagem com paginação e filtro
+- Cadastro de novas categorias
+- Edição de categorias existentes
+- Ativação/Inativação de categorias
+- Exclusão de categorias
+- Validações de campos obrigatórios
 
+### Produtos
+- Listagem com paginação e filtro
+- Cadastro de novos produtos
+- Edição de produtos existentes
+- Ativação/Inativação de produtos
+- Exclusão de produtos
+- Formatação monetária (BRL) para preços
+- Validações de campos obrigatórios
+
+## Tecnologias Utilizadas
+
+- Angular 17
+- Angular Material
+- TypeScript
+- SCSS
+- RxJS
+
+## Recursos Técnicos
+
+- Componentes standalone
+- Lazy loading
+- Formulários reativos
+- Pipes personalizados
+- Diretivas personalizadas
+- Serviços HTTP
+- Interceptors
+- Tratamento de erros
+- Feedback visual (snackbar)
+- Modais de confirmação
+
+## Pré-requisitos
+
+- Node.js
+- npm ou yarn
+- Angular CLI
+
+## Instalação
+
+1. Clone o repositório
+```bash
+git clone [url-do-repositorio]
+```
+
+2. Instale as dependências
+```bash
+npm install
+```
+
+3. Inicie o servidor de desenvolvimento
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+4. Acesse a aplicação em `http://localhost:4200`
 
-## Code scaffolding
+## Estrutura do Projeto
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```
+src/
+├── app/
+│   ├── core/
+│   │   ├── models/
+│   │   └── services/
+│   ├── features/
+│   │   ├── categorias/
+│   │   └── produtos/
+│   └── shared/
+│       ├── components/
+│       ├── directives/
+│       └── styles/
+├── assets/
+└── environments/
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Funcionalidades Detalhadas
 
-```bash
-ng generate --help
-```
+### Categorias
+- **Listagem**: Tabela com paginação, ordenação e filtro
+- **Status**: Chip colorido indicando status ativo/inativo
+- **Ações**: Botões para editar, ativar/inativar e excluir
 
-## Building
+### Produtos
+- **Listagem**: Tabela com paginação, ordenação e filtro
+- **Preço**: Formatação automática em BRL
+- **Estoque**: Controle de quantidade
+- **Status**: Chip colorido indicando status ativo/inativo
+- **Ações**: Botões para editar, ativar/inativar e excluir
 
-To build the project run:
+## Estilização
 
-```bash
-ng build
-```
+- Design moderno e responsivo
+- Tema personalizado do Material
+- Animações suaves
+- Feedback visual para ações
+- Ícones intuitivos
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Contribuição
 
-## Running unit tests
+1. Faça o fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Licença
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Este projeto está sob a licença MIT.

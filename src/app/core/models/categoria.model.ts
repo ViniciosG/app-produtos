@@ -1,8 +1,10 @@
+export type CategoriaStatus = 'ATIVA' | 'INATIVA';
+
 export interface Categoria {
     id: number;
     nome: string;
     descricao: string;
-    status: 'ATIVA' | 'INATIVA';
+    status: CategoriaStatus;
     dataHoraRegistro: string;
     dataHoraAlteracao: string;
 }

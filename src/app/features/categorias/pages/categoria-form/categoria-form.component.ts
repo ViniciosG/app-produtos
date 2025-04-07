@@ -5,79 +5,128 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Categoria, CategoriaRequest } from '../../../../core/models/categoria.model';
-import { CategoriaService } from '../../services/categoria.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Categoria } from '../../../../core/models/categoria.model';
+import { CategoriaService } from '../../../../core/services/categoria.service';
 
 @Component({
     selector: 'app-categoria-form',
-    templateUrl: './categoria-form.component.html',
-    styleUrls: ['./categoria-form.component.scss'],
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,
         MatDialogModule,
-        MatSnackBarModule,
+        MatButtonModule,
         MatFormFieldModule,
         MatInputModule,
-        MatButtonModule
+        MatSelectModule
     ],
-    standalone: true
+    template: `
+        <h2 mat-dialog-title>{{ data ? 'Editar' : 'Nova' }} Categoria</h2>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <mat-dialog-content>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label class="required-field">Nome</mat-label>
+                    <input matInput formControlName="nome" placeholder="Digite o nome">
+                    <mat-error *ngIf="form.get('nome')?.errors?.['required']">
+                        Nome é obrigatório
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label class="required-field">Descrição</mat-label>
+                    <textarea matInput formControlName="descricao" placeholder="Digite a descrição" rows="3"></textarea>
+                    <mat-error *ngIf="form.get('descricao')?.errors?.['required']">
+                        Descrição é obrigatória
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label class="required-field">Status</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option value="ATIVA">Ativa</mat-option>
+                        <mat-option value="INATIVA">Inativa</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('status')?.errors?.['required']">
+                        Status é obrigatório
+                    </mat-error>
+                </mat-form-field>
+            </mat-dialog-content>
+
+            <mat-dialog-actions align="end">
+                <button mat-button mat-dialog-close type="button">Cancelar</button>
+                <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+                    {{ data ? 'Atualizar' : 'Criar' }}
+                </button>
+            </mat-dialog-actions>
+        </form>
+    `,
+    styles: [`
+        .full-width {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+    `]
 })
 export class CategoriaFormComponent implements OnInit {
     form: FormGroup;
-    isEdit = false;
 
     constructor(
         private fb: FormBuilder,
-        private dialogRef: MatDialogRef<CategoriaFormComponent>,
         private categoriaService: CategoriaService,
+        private dialogRef: MatDialogRef<CategoriaFormComponent>,
         private snackBar: MatSnackBar,
         @Inject(MAT_DIALOG_DATA) public data?: Categoria
     ) {
         this.form = this.fb.group({
-            nome: ['', [Validators.required, Validators.minLength(3)]],
-            descricao: ['', [Validators.required, Validators.minLength(10)]]
+            nome: ['', [Validators.required]],
+            descricao: ['', [Validators.required]],
+            status: ['ATIVA', [Validators.required]]
         });
-
-        if (data) {
-            this.isEdit = true;
-            this.form.patchValue(data);
-        }
     }
 
     ngOnInit(): void {
+        if (this.data) {
+            this.form.patchValue(this.data);
+        }
     }
 
     onSubmit(): void {
         if (this.form.valid) {
-            const categoria: CategoriaRequest = this.form.value;
+            const categoria = this.form.value;
 
-            const operacao = this.isEdit
-                ? this.categoriaService.atualizar(this.data!.id, categoria)
-                : this.categoriaService.criar(categoria);
-
-            operacao.subscribe({
-                next: () => {
-                    this.snackBar.open(
-                        `Categoria ${this.isEdit ? 'atualizada' : 'criada'} com sucesso`,
-                        'Fechar',
-                        { duration: 3000 }
-                    );
-                    this.dialogRef.close(true);
-                },
-                error: () => {
-                    this.snackBar.open(
-                        `Erro ao ${this.isEdit ? 'atualizar' : 'criar'} categoria`,
-                        'Fechar',
-                        { duration: 3000 }
-                    );
-                }
-            });
+            if (this.data) {
+                this.categoriaService.atualizar(this.data.id, categoria).subscribe({
+                    next: () => {
+                        this.snackBar.open('Categoria atualizada com sucesso!', 'Fechar', {
+                            duration: 3000
+                        });
+                        this.dialogRef.close(true);
+                    },
+                    error: (error) => {
+                        console.error('Erro ao atualizar categoria:', error);
+                        this.snackBar.open('Erro ao atualizar categoria', 'Fechar', {
+                            duration: 3000
+                        });
+                    }
+                });
+            } else {
+                this.categoriaService.criar(categoria).subscribe({
+                    next: () => {
+                        this.snackBar.open('Categoria criada com sucesso!', 'Fechar', {
+                            duration: 3000
+                        });
+                        this.dialogRef.close(true);
+                    },
+                    error: (error) => {
+                        console.error('Erro ao criar categoria:', error);
+                        this.snackBar.open('Erro ao criar categoria', 'Fechar', {
+                            duration: 3000
+                        });
+                    }
+                });
+            }
         }
-    }
-
-    onCancel(): void {
-        this.dialogRef.close();
     }
 } 

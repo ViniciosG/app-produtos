@@ -10,13 +10,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Categoria } from '../../../../core/models/categoria.model';
-import { CategoriaService } from '../../../../core/services/categoria.service';
+import { Produto } from '../../../../core/models/produto.model';
+import { ProdutoService } from '../../../../core/services/produto.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { CategoriaFormComponent } from '../categoria-form/categoria-form.component';
+import { ProdutoFormComponent } from '../produto-form/produto-form.component';
 
 @Component({
-    selector: 'app-categoria-list',
+    selector: 'app-produto-list',
     standalone: true,
     imports: [
         CommonModule,
@@ -32,10 +32,10 @@ import { CategoriaFormComponent } from '../categoria-form/categoria-form.compone
     template: `
         <div class="table-container">
             <div class="table-header">
-                <h1>Categorias</h1>
+                <h1>Produtos</h1>
                 <button mat-flat-button color="primary" (click)="abrirForm()">
                     <mat-icon>add</mat-icon>
-                    Nova Categoria
+                    Novo Produto
                 </button>
             </div>
 
@@ -50,42 +50,52 @@ import { CategoriaFormComponent } from '../categoria-form/categoria-form.compone
             <table mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="id">
                     <th mat-header-cell *matHeaderCellDef>ID</th>
-                    <td mat-cell *matCellDef="let categoria">{{categoria.id}}</td>
+                    <td mat-cell *matCellDef="let produto">{{produto.id}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="nome">
                     <th mat-header-cell *matHeaderCellDef>Nome</th>
-                    <td mat-cell *matCellDef="let categoria">{{categoria.nome}}</td>
+                    <td mat-cell *matCellDef="let produto">{{produto.nome}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="descricao">
                     <th mat-header-cell *matHeaderCellDef>Descrição</th>
-                    <td mat-cell *matCellDef="let categoria">{{categoria.descricao}}</td>
+                    <td mat-cell *matCellDef="let produto">{{produto.descricao}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="preco">
+                    <th mat-header-cell *matHeaderCellDef>Preço</th>
+                    <td mat-cell *matCellDef="let produto">{{produto.preco | currency:'BRL'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantidadeEstoque">
+                    <th mat-header-cell *matHeaderCellDef>Estoque</th>
+                    <td mat-cell *matCellDef="let produto">{{produto.quantidadeEstoque}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="status">
                     <th mat-header-cell *matHeaderCellDef>Status</th>
-                    <td mat-cell *matCellDef="let categoria">
-                        <span class="status-chip" [class.active]="categoria.status === 'ATIVA'" [class.inactive]="categoria.status === 'INATIVA'">
-                            {{categoria.status}}
+                    <td mat-cell *matCellDef="let produto">
+                        <span class="status-chip" [class.active]="produto.status === 'ATIVO'" [class.inactive]="produto.status === 'INATIVO'">
+                            {{produto.status}}
                         </span>
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="acoes">
                     <th mat-header-cell *matHeaderCellDef>Ações</th>
-                    <td mat-cell *matCellDef="let categoria" class="actions-cell">
-                        <button mat-icon-button color="primary" (click)="editar(categoria)" matTooltip="Editar">
+                    <td mat-cell *matCellDef="let produto" class="actions-cell">
+                        <button mat-icon-button color="primary" (click)="editar(produto)" matTooltip="Editar">
                             <mat-icon>edit</mat-icon>
                         </button>
                         
                         <button mat-icon-button color="accent" 
-                                (click)="alterarStatus(categoria)"
-                                [matTooltip]="categoria.status === 'ATIVA' ? 'Inativar' : 'Ativar'">
-                            <mat-icon>{{categoria.status === 'ATIVA' ? 'toggle_on' : 'toggle_off'}}</mat-icon>
+                                (click)="alterarStatus(produto)"
+                                [matTooltip]="produto.status === 'ATIVO' ? 'Inativar' : 'Ativar'">
+                            <mat-icon>{{produto.status === 'ATIVO' ? 'toggle_on' : 'toggle_off'}}</mat-icon>
                         </button>
                         
-                        <button mat-icon-button color="warn" (click)="excluir(categoria)" matTooltip="Excluir">
+                        <button mat-icon-button color="warn" (click)="excluir(produto)" matTooltip="Excluir">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </td>
@@ -95,46 +105,46 @@ import { CategoriaFormComponent } from '../categoria-form/categoria-form.compone
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
                 <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell" colspan="5">Nenhum resultado encontrado para "{{input.value}}"</td>
+                    <td class="mat-cell" colspan="7">Nenhum resultado encontrado para "{{input.value}}"</td>
                 </tr>
             </table>
 
             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
                           showFirstLastButtons
-                          aria-label="Selecione a página de categorias">
+                          aria-label="Selecione a página de produtos">
             </mat-paginator>
         </div>
     `,
     styleUrls: ['../../../../shared/styles/table.scss']
 })
-export class CategoriaListComponent implements OnInit {
-    displayedColumns: string[] = ['id', 'nome', 'descricao', 'status', 'acoes'];
-    dataSource = new MatTableDataSource<Categoria>();
+export class ProdutoListComponent implements OnInit {
+    displayedColumns: string[] = ['id', 'nome', 'descricao', 'preco', 'quantidadeEstoque', 'status', 'acoes'];
+    dataSource = new MatTableDataSource<Produto>();
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     constructor(
-        private categoriaService: CategoriaService,
+        private produtoService: ProdutoService,
         private dialog: MatDialog,
         private snackBar: MatSnackBar
     ) { }
 
     ngOnInit(): void {
-        this.carregarCategorias();
+        this.carregarProdutos();
     }
 
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
     }
 
-    carregarCategorias(): void {
-        this.categoriaService.listar().subscribe({
-            next: (categorias) => {
-                this.dataSource.data = categorias;
+    carregarProdutos(): void {
+        this.produtoService.listar().subscribe({
+            next: (produtos) => {
+                this.dataSource.data = produtos;
             },
             error: (error) => {
-                console.error('Erro ao carregar categorias:', error);
-                this.snackBar.open('Erro ao carregar categorias', 'Fechar', {
+                console.error('Erro ao carregar produtos:', error);
+                this.snackBar.open('Erro ao carregar produtos', 'Fechar', {
                     duration: 3000
                 });
             }
@@ -146,41 +156,41 @@ export class CategoriaListComponent implements OnInit {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    abrirForm(categoria?: Categoria): void {
-        const dialogRef = this.dialog.open(CategoriaFormComponent, {
+    abrirForm(produto?: Produto): void {
+        const dialogRef = this.dialog.open(ProdutoFormComponent, {
             width: '600px',
-            data: categoria
+            data: produto
         });
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.carregarCategorias();
+                this.carregarProdutos();
             }
         });
     }
 
-    editar(categoria: Categoria): void {
-        this.abrirForm(categoria);
+    editar(produto: Produto): void {
+        this.abrirForm(produto);
     }
 
-    alterarStatus(categoria: Categoria): void {
-        const operacao = categoria.status === 'ATIVA'
-            ? this.categoriaService.inativar(categoria.id)
-            : this.categoriaService.ativar(categoria.id);
+    alterarStatus(produto: Produto): void {
+        const operacao = produto.status === 'ATIVO'
+            ? this.produtoService.inativar(produto.id)
+            : this.produtoService.ativar(produto.id);
 
         operacao.subscribe({
             next: () => {
                 this.snackBar.open(
-                    `Categoria ${categoria.status === 'ATIVA' ? 'inativada' : 'ativada'} com sucesso!`,
+                    `Produto ${produto.status === 'ATIVO' ? 'inativado' : 'ativado'} com sucesso!`,
                     'Fechar',
                     { duration: 3000 }
                 );
-                this.carregarCategorias();
+                this.carregarProdutos();
             },
             error: (error) => {
-                console.error('Erro ao alterar status da categoria:', error);
+                console.error('Erro ao alterar status do produto:', error);
                 this.snackBar.open(
-                    `Erro ao ${categoria.status === 'ATIVA' ? 'inativar' : 'ativar'} categoria`,
+                    `Erro ao ${produto.status === 'ATIVO' ? 'inativar' : 'ativar'} produto`,
                     'Fechar',
                     { duration: 3000 }
                 );
@@ -188,27 +198,27 @@ export class CategoriaListComponent implements OnInit {
         });
     }
 
-    excluir(categoria: Categoria): void {
+    excluir(produto: Produto): void {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             width: '400px',
             data: {
                 title: 'Confirmar exclusão',
-                message: `Deseja realmente excluir a categoria ${categoria.nome}?`
+                message: `Deseja realmente excluir o produto ${produto.nome}?`
             }
         });
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.categoriaService.deletar(categoria.id).subscribe({
+                this.produtoService.deletar(produto.id).subscribe({
                     next: () => {
-                        this.snackBar.open('Categoria excluída com sucesso!', 'Fechar', {
+                        this.snackBar.open('Produto excluído com sucesso!', 'Fechar', {
                             duration: 3000
                         });
-                        this.carregarCategorias();
+                        this.carregarProdutos();
                     },
                     error: (error) => {
-                        console.error('Erro ao excluir categoria:', error);
-                        this.snackBar.open('Erro ao excluir categoria', 'Fechar', {
+                        console.error('Erro ao excluir produto:', error);
+                        this.snackBar.open('Erro ao excluir produto', 'Fechar', {
                             duration: 3000
                         });
                     }
