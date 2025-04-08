@@ -4,6 +4,13 @@ Sistema desenvolvido em Angular para gerenciamento de produtos e categorias, com
 
 ## Funcionalidades
 
+### Autenticação e Segurança
+- Login de usuários
+- Logout seguro
+- Proteção de rotas
+- Armazenamento seguro de tokens
+- Redirecionamento automático para login
+
 ### Categorias
 - Listagem com paginação e filtro
 - Cadastro de novas categorias
@@ -28,6 +35,7 @@ Sistema desenvolvido em Angular para gerenciamento de produtos e categorias, com
 - TypeScript
 - SCSS
 - RxJS
+- LocalStorage para gerenciamento de sessão
 
 ## Recursos Técnicos
 
@@ -41,12 +49,15 @@ Sistema desenvolvido em Angular para gerenciamento de produtos e categorias, com
 - Tratamento de erros
 - Feedback visual (snackbar)
 - Modais de confirmação
+- Gerenciamento de estado
+- Rotas protegidas
+- Sistema de autenticação
 
 ## Pré-requisitos
 
-- Node.js
+- Node.js (versão 18 ou superior)
 - npm ou yarn
-- Angular CLI
+- Angular CLI (versão 17 ou superior)
 
 ## Instalação
 
@@ -74,8 +85,10 @@ src/
 ├── app/
 │   ├── core/
 │   │   ├── models/
-│   │   └── services/
+│   │   ├── services/
+│   │   └── guards/
 │   ├── features/
+│   │   ├── auth/
 │   │   ├── categorias/
 │   │   └── produtos/
 │   └── shared/
@@ -87,6 +100,12 @@ src/
 ```
 
 ## Funcionalidades Detalhadas
+
+### Autenticação
+- **Login**: Formulário seguro com validações
+- **Logout**: Botão de logout com limpeza de sessão
+- **Proteção**: Guardas de rota para áreas restritas
+- **Persistência**: Gerenciamento de sessão com localStorage
 
 ### Categorias
 - **Listagem**: Tabela com paginação, ordenação e filtro
@@ -107,6 +126,15 @@ src/
 - Animações suaves
 - Feedback visual para ações
 - Ícones intuitivos
+- Layout adaptativo para diferentes dispositivos
+
+## Segurança
+
+- Proteção de rotas
+- Gerenciamento seguro de tokens
+- Validação de sessão
+- Limpeza de dados sensíveis no logout
+- Tratamento de erros de autenticação
 
 ## Contribuição
 
