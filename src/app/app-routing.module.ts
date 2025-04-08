@@ -1,11 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 
 export const routes: Routes = [
     {
+        path: 'auth',
+        loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
+    },
+    {
         path: '',
         component: LayoutComponent,
+        canActivate: [authGuard],
         children: [
             {
                 path: 'categorias',
@@ -21,6 +27,10 @@ export const routes: Routes = [
                 pathMatch: 'full'
             }
         ]
+    },
+    {
+        path: '**',
+        redirectTo: 'auth/login'
     }
 ];
 

@@ -20,8 +20,10 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
         SidebarComponent
     ],
     template: `
-        <mat-sidenav-container>
-            <mat-sidenav mode="side" opened>
+        <mat-sidenav-container class="sidenav-container">
+            <mat-sidenav #drawer class="sidenav" fixedInViewport
+                [mode]="'side'"
+                [opened]="true">
                 <app-sidebar></app-sidebar>
             </mat-sidenav>
             <mat-sidenav-content>
@@ -39,10 +41,10 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
             display: block;
             height: 100vh;
         }
-        mat-sidenav-container {
+        .sidenav-container {
             height: 100%;
         }
-        mat-sidenav {
+        .sidenav {
             width: 250px;
         }
         .content {

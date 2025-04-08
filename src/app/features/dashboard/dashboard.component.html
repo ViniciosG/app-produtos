@@ -1,0 +1,15 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Dashboard</h1>
+    <button class="logout-button" (click)="logout()">Sair</button>
+  </header>
+
+  <nav class="dashboard-nav">
+    <a routerLink="/categorias" class="nav-link">Categorias</a>
+    <a routerLink="/produtos" class="nav-link">Produtos</a>
+  </nav>
+
+  <main class="dashboard-content">
+    <router-outlet></router-outlet>
+  </main>
+</div> 

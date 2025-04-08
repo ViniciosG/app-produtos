@@ -1,14 +1,18 @@
-import { provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig } from '@angular/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { ApplicationConfig, mergeApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { materialConfig } from './material.config';
 
-import { routes } from './app-routing.module';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(routes),
-    provideAnimations(),
-    provideHttpClient()
-  ]
-};
+export const appConfig: ApplicationConfig = mergeApplicationConfig(
+  materialConfig,
+  {
+    providers: [
+      provideRouter(routes),
+      provideHttpClient(
+        withInterceptors([authInterceptor])
+      )
+    ]
+  }
+);
